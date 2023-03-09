@@ -1,10 +1,8 @@
-let form = document.getElementById("form");
-let user = document.getElementById("user");
-let email = document.getElementById("email");
-let pasword = document.getElementById("pasword");
-let pasword2 = document.getElementById("confirmpws");
-let button = document.getElementById("button");
-
+const form = document.getElementById('form');
+const username = document.getElementById('user');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const password2 = document.getElementById('password2');
 function showError(input){
     const formControl = input.parentElement;
     formControl.classname = "form-control error";
@@ -12,35 +10,57 @@ function showError(input){
 
 function showSuccess(input){
     const formControl = input.parentElement;
-    formControl.classname = "form-control success"
+    formControl.classname = "form-control success";
 }
 
 function checkEmail(input){
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(re.test(input.value.trim())){
-        
-    }    
-}
-
-function checkLength(user, min, max){
-    let length = user.length;
-    if(length < min){
-
-    }else if(length > max){
-
+        showSuccess(input);
     }else{
-
+        showError(input);
     }
 }
 
-function submit(){
-    verifyUser
+function checkRequired(inpArr){
+    let isRequired = false;
+    inpArr.forEach(function(input){
+        if(input.value.trim() === ""){
+            showError(input);
+            isRequired = true;
+        }else{
+            showSuccess(input);
+        }
+    });
+    return isRequired;
 }
-form.addEventListener('submit', function(e) {
+
+function checkLength(input, min, max){
+    let length = user.length;
+    if(length < min){
+        showError(input);
+    }else if(length > max){
+        showError(input);
+    }else{
+        showSuccess(input);
+    }
+}
+
+function checkPasswordsMatch(input1, input2){
+    if(input1 !== input2){
+        showError(input2);
+    }
+}
+
+function getFieldName(input) {
+    return input.id.charAt(0).toUpperCase() + input.id.slice(1);
+}
+
+form.addEventListener('submit', function(e){
     e.preventDefault();
   
-    if(checkRequired([user, email, password, password2])){
-      checkLength(user, 3, 15);
+    if(checkRequired([username, email, password, password2])){
+      checkLength(username, 3, 15);
       checkLength(password, 6, 25);
       checkEmail(email);
       checkPasswordsMatch(password, password2);
